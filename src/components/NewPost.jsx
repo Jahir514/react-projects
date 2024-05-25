@@ -1,7 +1,7 @@
 
 import classes from './NewPost.module.css';
 
-function NewPost({ onBodyChange, onAuthorChange }) {
+function NewPost({ onBodyChange, onAuthorChange, onCloseModal, onPostSubmit }) {
 
 
     return (
@@ -14,6 +14,11 @@ function NewPost({ onBodyChange, onAuthorChange }) {
                 <label htmlFor="name">Your name</label>
                 <input type="text" id="name" required onChange={onAuthorChange} />
             </p>
+            <div className={classes.actions}>
+                <button type='button' onClick={onCloseModal}>Cancel</button>
+                <button onClick={onPostSubmit}>Submit</button>
+            </div>
+            
         </form>
     );
 }
