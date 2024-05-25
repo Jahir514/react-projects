@@ -3,30 +3,30 @@ import NewPost from "./NewPost"
 import Post from "./Post"
 import classes from './PostLists.module.css'
 import { useState } from 'react';
-const PostLists = ({isModalOpen, onCloseModal}) => {
-    const [postBody, setPostBody] = useState('')
-    const [postAuthor, setPostAuthor] = useState('')
+const PostLists = ({ isModalOpen, onCloseModal }) => {
+
     const [posts, setPosts] = useState([])
-    const changeBodyHandler = (e) => {
-        setPostBody(e.target.value)
-    }
-    const changeAuthorHandler = (e) => {
-        setPostAuthor(e.target.value)
-    }
-    const submitPostHandler = (e) => {
-        e.preventDefault()
-        setPosts((prevPost) => [...prevPost, {title: postBody, author: postAuthor}])
+
+    const addPostHandler = (postData) => {
+        fetch('http://localhost:8080/posts', {
+            method: 'POST',
+            body: JSON.parse(postData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        setPosts((prevPost) => [postData, ...prevPost])
     }
 
     return (
         <>
             {isModalOpen && <Modal>
-                 <NewPost onBodyChange={changeBodyHandler} onAuthorChange={changeAuthorHandler} onCloseModal={onCloseModal} onPostSubmit={submitPostHandler} />
-                </Modal>
+                <NewPost onCloseModal={onCloseModal} onAddPost={addPostHandler} />
+            </Modal>
             }
-     
+
             <ul className={classes.posts}>
-                {posts.length > 0 ? posts.map(post => <Post key={post.title} title={post.title} author={post.author}/>) : "Currently No Post Available"}
+                {posts.length > 0 ? posts.map(post => <Post key={post.title} title={post.title} author={post.author} />) : "Currently No Post Available"}
             </ul>
         </>
 
